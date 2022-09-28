@@ -4,24 +4,35 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class MenuUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI nameText, highestScorerName, highestScore;
-    [SerializeField] private Button enterNameButton, startButton, exitButton;
+    [SerializeField] private TextMeshProUGUI highestScorerName, highestScore;
+    [SerializeField] private Button startButton, exitButton; // For Unity Event matching
+
+    private NewPlayer player;
 
     public void StartGame()
     {
         LoadMainScene();
+        //SaveManager.Instance.LoadData();
+        //NewSavingSystem.LoadPlayerName(player);
+        CheckForNameAndScore();
     }
 
-    private void LoadMainScene()
+    private static void CheckForNameAndScore()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        PlayerPrefs.GetString("Name", " ");
+        PlayerPrefs.GetInt("HighScore", 0);
     }
+
+    private void LoadMainScene() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
     public void ExitGame()
     {
+        NewSavingSystem.SavePlayerName(player);
+        NewSavingSystem.SavePlayerScore(player);
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.ExitPlaymode();
 #endif

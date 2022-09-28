@@ -10,6 +10,7 @@ public class MainManager : MonoBehaviour
     public int LineCount = 6;
     public Rigidbody Ball;
 
+    public Text ScoreAndNameText;
     public Text ScoreText;
     public GameObject GameOverText;
     
@@ -17,9 +18,16 @@ public class MainManager : MonoBehaviour
     private int m_Points;
     
     private bool m_GameOver = false;
+    private SaveWithPlayerPrefs save;
 
-    
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+        save = FindObjectOfType<SaveWithPlayerPrefs>(); 
+
+    }
+
     void Start()
     {
         const float step = 0.6f;
@@ -36,6 +44,23 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+
+        PlayerPrefs.GetInt("CurrentHighScore").ToString();
+        PlayerPrefs.GetString("NameOfTheNewHighScorer");
+    }
+
+    //private void OnEnable()
+    //{
+    //    SaveManager.OnDataLoaded += UpdateDisplay;
+    //}
+    //private void OnDisable()
+    //{
+    //    SaveManager.OnDataLoaded -= UpdateDisplay;
+    //}
+
+    private void UpdateDisplay(SaveManager.GameData data)
+    {
+        ScoreAndNameText.text = $"Score: {data.currentScore} Name: {data.currentName}";
     }
 
     private void Update()
@@ -65,7 +90,9 @@ public class MainManager : MonoBehaviour
     void AddPoint(int point)
     {
         m_Points += point;
-        ScoreText.text = $"Score : {m_Points}";
+        m_Points = save.Score;
+        ScoreText.text = $"Score : {save.Score}";
+        save.SaveNewHighScore();
     }
 
     public void GameOver()
