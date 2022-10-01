@@ -28,7 +28,7 @@ public class MenuUI : MonoBehaviour
 
     private void SetBestPlayerNameAndScore()
     {
-        highestScorerName.SetText(SaveManager.Instance.GetBestPlayerName());
-        highestScore.SetText(SaveManager.Instance.GetBestPlayerScore().ToString());
+        highestScorerName.text = $"Player Name: {SaveManager.Instance.GetBestPlayerName()}";
+        highestScore.text = $"Best Player Score: {SaveManager.Instance.GetBestPlayerScore()}";
     }
 }

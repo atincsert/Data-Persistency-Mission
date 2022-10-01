@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class MainManager : MonoBehaviour
 {
-    public static event Action OnScoreIncremented;
+    //public static event Action OnScoreIncremented;
 
     public Brick BrickPrefab;
     public int LineCount = 6;
@@ -84,6 +84,6 @@ public class MainManager : MonoBehaviour
 
     private void SetBestPlayerNameAndScore()
     {
-        ScoreAndNameText.text = $"Best Score {SaveManager.Instance.GetBestPlayerScore() } : Name : {SaveManager.Instance.GetBestPlayerName()}";
+        ScoreAndNameText.text = $"Best Score: {SaveManager.Instance.GetBestPlayerScore()} : Name: {SaveManager.Instance.GetBestPlayerName()}";
     }
 }
