@@ -1,41 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using System;
+using UnityEngine.UI;
 
 public class MenuUI : MonoBehaviour
 {
+    [SerializeField] private TMP_InputField inputField;
     [SerializeField] private TextMeshProUGUI highestScorerName, highestScore;
     [SerializeField] private Button startButton, exitButton; // For Unity Event matching
 
-    private NewPlayer player;
+    private void Start() => SetBestPlayerNameAndScore();
 
-    public void StartGame()
+    public void LoadMainSceneButton()
     {
-        LoadMainScene();
-        //SaveManager.Instance.LoadData();
-        //NewSavingSystem.LoadPlayerName(player);
-        CheckForNameAndScore();
+        SaveManager.Instance.SaveCurrentPlayerName(inputField.text);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
-
-    private static void CheckForNameAndScore()
-    {
-        PlayerPrefs.GetString("Name", " ");
-        PlayerPrefs.GetInt("HighScore", 0);
-    }
-
-    private void LoadMainScene() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
     public void ExitGame()
     {
-        NewSavingSystem.SavePlayerName(player);
-        NewSavingSystem.SavePlayerScore(player);
+        FindObjectOfType<SaveManager>().Load();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.ExitPlaymode();
 #endif
         Application.Quit();
+    }
+
+    private void SetBestPlayerNameAndScore()
+    {
+        highestScorerName.SetText(SaveManager.Instance.GetBestPlayerName());
+        highestScore.SetText(SaveManager.Instance.GetBestPlayerScore().ToString());
     }
 }
